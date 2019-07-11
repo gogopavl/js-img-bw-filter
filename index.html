@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>
+            B&W Image Filter
+        </title>
+    </head>
+
+    <body>
+        <form>
+            <input type="button" onclick="blackAndWhite()" value="Make image black and white"/>
+        </form>
+
+        <canvas id="img_canvas"></canvas>
+
+        <script>
+            var $ = function(selector) {
+                return document.querySelector(selector);
+            };
+            
+            var canvas = $('canvas#img_canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = 1920;
+            canvas.height = 1080;
+    
+            var img = document.createElement('img');
+            img.src = 'fooImg.png';
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+            };
+
+            function blackAndWhite () {
+                var bwPixels = ctx.getImageData(0, 0, 1920, 1080);
+                for (var i=0, l=bwPixels.data.length; i<l; i+=4) {
+                    avg = (bwPixels.data[i] + bwPixels.data[i+1] + bwPixels.data[i+2])/3;
+                    bwPixels.data[i] = avg;
+                    bwPixels.data[i+1] = avg;
+                    bwPixels.data[i+2] = avg;
+                }
+                ctx.putImageData(bwPixels, 0, 0);
+            };
+    
+        </script>
+    </body>
+</html>
